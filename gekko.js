@@ -19,7 +19,33 @@
   it is working.
 
 */
+console.log(`
+______   ________  __    __  __    __   ______
+/      \\ /        |/  |  /  |/  |  /  | /      \\
+/$$$$$$  |$$$$$$$$/ $$ | /$$/ $$ | /$$/ /$$$$$$  |
+$$ | _$$/ $$ |__    $$ |/$$/  $$ |/$$/  $$ |  $$ |
+$$ |/    |$$    |   $$  $$<   $$  $$<   $$ |  $$ |
+$$ |$$$$ |$$$$$/    $$$$$  \\  $$$$$  \\  $$ |  $$ |
+$$ \\__$$ |$$ |_____ $$ |$$  \\ $$ |$$  \\ $$ \\__$$ |
+$$    $$/ $$       |$$ | $$  |$$ | $$  |$$    $$/ 
+$$$$$$/  $$$$$$$$/ $$/   $$/ $$/   $$/  $$$$$$/
+`);
+console.log('Log redirected to ./debug.log');
 
+var fs = require('fs');
+var utilWriteOverLog = require('util');
+var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
+var log_stdout = process.stdout;
+console.log = function(d) { 
+  log_file.write('LOG      : ' + utilWriteOverLog.format.apply(null, arguments) + '\n');
+};
+console.warn = function(err) { 
+  log_file.write('WARNING : ' + utilWriteOverLog.format.apply(null, arguments) + '\n' +  + JSON.stringify(err));
+};
+console.error = function(err) { 
+  log_file.write('ERROR   : ' + utilWriteOverLog.format.apply(null, arguments) + '\n'  + JSON.stringify(err));
+};
+global.debugPort = 9230;
 console.log(`
     ______   ________  __    __  __    __   ______
    /      \\ /        |/  |  /  |/  |  /  | /      \\
@@ -42,6 +68,8 @@ const dirs = util.dirs();
 if(util.launchUI())
   return require(util.dirs().web + 'server');
 
+
+
 const pipeline = require(dirs.core + 'pipeline');
 const config = util.getConfig();
 const mode = util.gekkoMode();
@@ -58,4 +86,3 @@ pipeline({
   config: config,
   mode: mode
 });
-

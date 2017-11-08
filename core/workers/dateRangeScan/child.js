@@ -2,7 +2,7 @@ var util = require(__dirname + '/../../util');
 
 var dirs = util.dirs();
 var ipc = require('relieve').IPCEE(process);
-
+try {
 ipc.on('start', config => {
 
   // force correct gekko env
@@ -19,8 +19,28 @@ ipc.on('start', config => {
     (err, ranges, reader) => {
       reader.close();
       ipc.send('ranges', ranges)
-      process.exit(0);
+      ipc.send('ranges Finished') //AK
+      //process.exit(0);  //AK
     }
   );
+
 });
 
+ipc.on('message', (m) => {  //AK
+  if(m.what === 'Exit-Child') //AK
+    process.exit(); //AK
+});
+ipc.on('error',function(err) {
+  console.log('IPC Error  : '+err );
+  console.log('CHILD Error Stack :'+err.stack );});
+
+ipc.on('uncaughtException',function(err) {
+  console.log('IPC uncaughtException:'+err);});
+
+
+
+} catch (err) {
+console.log('IPC Error Try/Catch:'+err);
+console.log('IPC Error Stack :'+err.stack );
+
+}

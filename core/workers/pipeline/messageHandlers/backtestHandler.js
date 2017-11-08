@@ -22,9 +22,6 @@ module.exports = done => {
 
             else if (message.type === 'report')
                 report = message.report;
-
-            else if (message.log)
-                console.log(message.log);
             
             else if(message.type === 'indicatorResult') {
                 if(!_.has(indicatorResults, message.indicatorResult.name))
@@ -34,11 +31,7 @@ module.exports = done => {
                     date: message.indicatorResult.date
                 });
             }
-        },
-        exit: status => {
-            if (status !== 0)
-                done('Child process has died.');
-            else
+            else if (message === 'Backtest Finished') {
                 done(null, {
                     trades,
                     candles,
@@ -46,6 +39,11 @@ module.exports = done => {
                     roundtrips,
                     indicatorResults
                 });
+            }
+        },
+        exit: status => {
+            if (status !== 0)
+                done('Child process has died.');
         }
     }
 }

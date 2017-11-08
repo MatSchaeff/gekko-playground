@@ -19,6 +19,9 @@ var start = (config, candleSize, daterange) => {
 process.send('ready');
 
 process.on('message', (m) => {
-  if(m.what === 'start')
+  if(m.what === 'start') {
     start(m.config, m.candleSize, m.daterange);
+  }
+  if(m.what === 'Exit-Child') //AK
+    process.exit(); //AK
 });

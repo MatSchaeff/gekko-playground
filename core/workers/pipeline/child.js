@@ -20,6 +20,7 @@
 
 */
 
+
 var start = (mode, config) => {
   var util = require(__dirname + '/../../util');
 
@@ -41,7 +42,14 @@ var start = (mode, config) => {
 
 process.send('ready');
 
+//AK Not fired : process.on('error',function(err) {console.log('IN CHILD Error:'+err);});
+//AK Not fired : process.on('uncaughtException',function(err) {console.log('IN CHILD uncaughtException:'+err);});
+
 process.on('message', function(m) {
-  if(m.what === 'start')
+  if(m.what === 'start') 
     start(m.mode, m.config);
+  else if(m.what === 'Exit-Child')  //AK
+    process.exit();  //AK  
+  else
+    console.log(`pipeline/child/message`  + JSON.stringify(m));
 });

@@ -194,7 +194,7 @@ var pipeline = (settings) => {
         // .pipe(new require('stringify-stream')())
         // output to standard out
         // .pipe(process.stdout);
-
+      market.on('message', function (m) {log.debug(`Market on message ${m}`);} );//AK
       market.on('end', gekko.finalize);
     }
   );

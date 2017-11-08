@@ -11,6 +11,10 @@ var daterange = config.backtest.daterange;
 
 var to = moment.utc(daterange.to);
 var from = moment.utc(daterange.from);
+var dateStart = moment.utc(daterange.to);
+var dateEnd = moment.utc(daterange.from);
+//log.write('to',to);
+//log.write('from',from);
 
 if(to <= from)
   util.die('This daterange does not make sense.')
@@ -74,8 +78,10 @@ Market.prototype.processCandles = function(err, candles) {
     if(this.ended) {
       this.closed = true;
       this.reader.close();
-      this.emit('end');
+//      process.send('Backtest Finished'); //AK
+      this.emit('end'); //AK
     } else {
+//      process.send('Backtest Finished - No Candles'); //AK
       util.die('Query returned no candles (do you have local data for the specified range?)');
     }
   }
@@ -101,6 +107,15 @@ Market.prototype.processCandles = function(err, candles) {
     to: this.iterator.from.clone().add(this.batchSize * 2, 'm').subtract(1, 's')
   }
 
+//    var p_dateEnd = new Date(dateEnd).getTime()
+//    var p_dateStart = new Date(dateStart).getTime()
+//    log.write('bar progress')
+//    log.write('percent',percent)
+//    log.write('dateEnd',from)
+//    log.write('dateEnd',p_dateEnd)
+//  var percent = ( dateEnd - from ) / ( dateEnd - dateStart ) * 100;
+//    log.write('dateStart',dateStart)
+//  log.write(`Backtest : ${percent} ${from}  ${to}`);
   if(!this.closed)
     this.get();
 }

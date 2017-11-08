@@ -31,13 +31,20 @@
 //   console.log('data', data.length);
 // })
 
-
+if(process.execArgv.indexOf('--debug')   !== -1)   {  
+  console.log(`./workers/pipeline/Parent.js   About to Fork ${global.debugPort}`);  
+  process.execArgv.push('--debug='   + (global.debugPort++)); 
+}
+if( process.execArgv.indexOf('--inspect') !== -1) { 
+  console.log(`./workers/pipeline/Parent.js   About to Fork ${global.debugPort}`);  
+  process.execArgv.push('--inspect=' + (global.debugPort++)); 
+}
 const fork = require('child_process').fork;
 const _ = require('lodash');
 
 module.exports = (config, callback) => {
   const child = fork(__dirname + '/child');
-
+  try {
   const message = {
     what: 'start',
     config
@@ -46,16 +53,35 @@ module.exports = (config, callback) => {
   const done = _.once(callback);
 
   child.on('message', function(m) {
+    
     if(m === 'ready')
       return child.send(message);
 
     // else we are done and have candles!
     done(null, m);
-    child.kill('SIGINT');
+
+    //child.kill('SIGINT');
+    child.send('Exit-Child');
+   
   });
 
   child.on('exit', code => {
     if(code !== 0)
       done('ERROR, unable to load candles, please check the console.');
   });
+  child.on('exit',function(m){ console.log(`loadCandles Child Exited`);});
+  child.on('error',function(err) {
+    console.log('CHILD Error  : '+err );
+    console.log('CHILD Error Stack :'+err.stack );});
+
+  child.on('uncaughtException',function(err) {
+    console.log('CHILD uncaughtException:'+err);});
+
+
+
+} catch (err) {
+  console.log('CHILD Error Try/Catch:'+err);
+  console.log('CHILD Error Stack :'+err.stack );
+  
+}
 }

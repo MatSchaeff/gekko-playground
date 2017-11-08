@@ -7,8 +7,8 @@ module.exports = cb => {
     message: message => {
 
       if(message.type === 'error') {
+        console.log(message.error);
         cb(message.error);
-        console.error(message.error);
       }
 
       else
@@ -16,8 +16,13 @@ module.exports = cb => {
 
     },
     exit: status => {
-      if(status !== 0)
+      if(status !== 0) {
+        var err = new Error();
+        
+        console.log('realtimeHandler - Child Process Died :' );
+        console.log(err.stack); //AK
         cb('Child process has died.');
+      }
       else
         cb(null, { done: true });
     }
