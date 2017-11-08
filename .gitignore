@@ -45,3 +45,18 @@ TMP_*
 .idea
 volumes
 SECRET-api-keys.json
+
+# Private
+
+config_largeCandle2h.js
+config_largeCandle30m.js
+config.js
+run-ga-parallel.js
+run-ga-parallel2.js
+run-ga-parallel3.js
+strategies/STC.js
+strategies/RSI_lc.js
+strategies/CCI_lc.js
+strategies/custom.js
+config/strategies/STC.toml
+largeCandle2hOMGfull.json

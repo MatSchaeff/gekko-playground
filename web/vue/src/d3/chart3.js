@@ -3,6 +3,8 @@ import _ from 'lodash'
 // techanjs based cancle chart, unused at the moment
 
 export default function(_data, _trades) {
+    console.log("_data1");
+    console.log(_data);
     let MAX_WIDTH = window.innerWidth - 20;
 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},

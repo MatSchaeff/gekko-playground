@@ -3,6 +3,12 @@ import _ from 'lodash';
 
 export default function(_data, _trades, _height) {
 
+    console.log("_data2");
+    console.log(_data);
+    console.log("_trades");
+    console.log(_trades);
+    console.log("_height");
+    console.log(_height);
   const trades = _trades.map(t => {
     return {
       price: t.price,

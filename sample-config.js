@@ -55,6 +55,18 @@ config.DEMA = {
     up: 0.025
   }
 };
+config.custom2 = {
+  // EMA weight (α)
+  // the higher the weight, the more smooth (and delayed) the line
+  short: 10,
+  long: 21,
+  // amount of candles to remember and base initial EMAs on
+  // the difference between the EMAs (to act as triggers)
+  thresholds: {
+    down: -0.025,
+    up: 0.025
+  }
+};
 
 // MACD settings:
 config.MACD = {
@@ -169,6 +181,10 @@ config.StochRSI = {
 
 // custom settings:
 config.custom = {
+  my_custom_setting: 10,
+}
+// custom settings:
+config.custom2 = {
   my_custom_setting: 10,
 }
 
